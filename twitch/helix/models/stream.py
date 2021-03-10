@@ -13,6 +13,7 @@ class Stream(Model):
         self.id: str = data.get('id')
         self.user_id: str = data.get('user_id')
         self.game_id: str = data.get('game_id')
+        self.game_name: str = data.get('game_name')
         self.community_ids: List[str] = data.get('community_ids', [])
         self.type: str = data.get('type')
         self.title: str = data.get('title')
