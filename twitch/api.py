@@ -18,7 +18,8 @@ class API:
                  request_rate: Optional[int] = None,
                  bearer_token: Optional[str] = None,
                  handle_rate_limit: bool = True,
-                 cache_duration: Optional[timedelta] = None):
+                 cache_duration: Optional[timedelta] = None,
+                 requests_timeout: Optional[float] = 5.0):
         """
         Twitch API
         :param base_url: API URL
@@ -27,6 +28,7 @@ class API:
         :param bearer_token: Twitch bearer token
         :param handle_rate_limit: Handle rate limits by sleeping
         :param cache_duration: Local cache duration
+        :param requests_timeout: Default timeout in seconds for requests send() call
         """
         self.base_url: Optional[str] = base_url
         self.client_id: Optional[str] = client_id
@@ -36,6 +38,7 @@ class API:
         self.bearer_token: Optional[str] = bearer_token
         self.handle_rate_limit: bool = handle_rate_limit
         self.cache_duration: Optional[timedelta] = cache_duration
+        self.requests_timeout: Optional[float] = requests_timeout
 
         # Rate limit
         self.rate_limit_points: int = 800 if self.bearer_token else 30
@@ -87,7 +90,7 @@ class API:
         self._handle_rate_limit()
 
         while True:
-            response = requests.Session().send(request)
+            response = requests.Session().send(request, timeout=self.requests_timeout)
             self._set_rate_limit(response)
 
             # Too many requests status
