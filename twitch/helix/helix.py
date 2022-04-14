@@ -36,7 +36,8 @@ class Helix:
             bearer_token = requests.post(f"https://id.twitch.tv/oauth2/token"
                                          f"?client_id={client_id}"
                                          f"&client_secret={client_secret}"
-                                         "&grant_type=client_credentials").json()['access_token']
+                                         "&grant_type=client_credentials",
+                                         timeout=15).json()['access_token']
 
         if bearer_token.lower().startswith('bearer'):
             bearer_token = bearer_token[6:0]
